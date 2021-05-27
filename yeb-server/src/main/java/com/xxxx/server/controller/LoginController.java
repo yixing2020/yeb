@@ -37,6 +37,8 @@ public class LoginController {
         String username = principal.getName();
         Admin admin= iAdminService.getAdminByUserName(username);
         admin.setPassword(null);
+        //将获取到的角色列表设置到admin对象中去
+        admin.setRoles(iAdminService.getRoleByAdminId(admin.getId()));
         return admin;
     }
     @ApiOperation(value="退出登入")

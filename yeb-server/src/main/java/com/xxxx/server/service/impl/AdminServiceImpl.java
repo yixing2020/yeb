@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxxx.server.config.security.JwtTokenUtil;
 import com.xxxx.server.mapper.AdminMapper;
 import com.xxxx.server.pojo.Admin;
+import com.xxxx.server.pojo.Menu;
 import com.xxxx.server.pojo.RespBean;
+import com.xxxx.server.pojo.Role;
 import com.xxxx.server.service.IAdminService;
 import org.apache.ibatis.parsing.TokenHandler;
 import org.mapstruct.Mapper;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -95,4 +98,30 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         return adminMapper.selectOne(new QueryWrapper<Admin>().eq("username",username).eq("enabled",true));
 
     }
+
+    /**
+     * 根据用户ID 查询对应的角色
+     * @param adminId
+     * @return
+     */
+    @Override
+    public List<Role> getRoleByAdminId(Integer adminId) {
+        return adminMapper.getRoleByAdminId(adminId);
+
+    }
+
+    /**
+     * 查询所有操作员
+     * @param keyword
+     * @return
+     */
+    @Override
+    public List<Admin> getAllAdmins(String keyword) {
+        Admin admin=(Admin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return adminMapper.getAllAdmins(admin.getId(),keyword);
+
+
+    }
+
+
 }

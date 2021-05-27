@@ -1,9 +1,12 @@
 package com.xxxx.server.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -57,6 +60,16 @@ public class Menu implements Serializable {
 
     @ApiModelProperty(value = "是否启用")
     private Boolean enabled;
+
+    @ApiModelProperty(value = "子菜单")
+    //应为我们数据表中没有这个字段,如果去查的话就会报错,所以用注解@TableField 标识一下表示没有children这个东西
+    @TableField(exist = false)
+    private List<Menu> children;
+
+    @ApiModelProperty(value = "角色列表")
+    @TableField(exist = false)
+    private List<Role> roles;
+
 
 
 }

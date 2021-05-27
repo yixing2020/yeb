@@ -55,11 +55,12 @@ public class Swagger2Config {
     }
 
     /**
-     * 设置请求头的信息
+     * 用来设置请求头的信息
      * @return
      */
     private List<ApiKey> securitySchemes(){
         List<ApiKey> result=new ArrayList<>();
+        //参数1:apikey的名字,参数2:key具体的名字,参数3:是参数2对应的值
         ApiKey apiKey=new ApiKey("Authorization","Authorization","header");
         result.add(apiKey);
         return result;
@@ -85,6 +86,10 @@ public class Swagger2Config {
                 .build();
     }
 
+    /**
+     * 默认授权
+     * @return
+     */
     private List<SecurityReference> defaultAuth(){
         List<SecurityReference> references=new ArrayList<>();
         AuthorizationScope authorizationScope=new AuthorizationScope("global","accessEverything");

@@ -31,9 +31,11 @@ public class JwtTokenUtil {
      * @return
      */
     public String generateToken(UserDetails userDetails){
-        //创建荷载
+        //创建一个map 集合用于存放荷载 信息
         Map<String,Object> claims=new HashMap<>();
+        //将登入的用户名称,放入
         claims.put(CLAIN_KEY_USERNAME,userDetails.getUsername());
+        //将token的创建时间放入
         claims.put(CLAIN_KEY_CREATED,new Date());
 
         return  generateToken(claims);
@@ -47,11 +49,12 @@ public class JwtTokenUtil {
      * @return
      */
     public  String generateToken(Map<String,Object> claims){
+        //创建token
         return Jwts.builder()
                 .setClaims(claims)//设置荷载
                 .setExpiration(generateExpirationDate())//设置失效时间,generateExpirationDate()是创建失效时间
-                .signWith(SignatureAlgorithm.HS512,sercret)//设置签名
-                .compact();
+                .signWith(SignatureAlgorithm.HS512,sercret)//设置盐,加密方式,以及加密字符
+                .compact();//生成token
 
     }
 
@@ -81,6 +84,7 @@ public class JwtTokenUtil {
      * @return
      */
     public boolean canRefresh(String token){
+
         return  !isTokenExpiration(token);
     }
 
@@ -119,6 +123,7 @@ public class JwtTokenUtil {
     private boolean isTokenExpiration(String token) {
         //获取失效时间
         Date expiration =getDateExpirationFromToken(token);
+        //判断是否失效
         return  expiration.before(new Date());
     }
 
@@ -130,6 +135,7 @@ public class JwtTokenUtil {
     private Date getDateExpirationFromToken(String token) {
         //获取荷载
         Claims claims = getTokenFromClaims(token);
+        //获取失效时间getExpiration()
         Date expiration = claims.getExpiration();
         return expiration;
     }
@@ -141,9 +147,9 @@ public class JwtTokenUtil {
      */
     private Claims getTokenFromClaims(String token) {
         Claims claims=null;
-        //获取荷载
 
         try {
+            //解析token 获取荷载
             claims = Jwts.parser()
                     .setSigningKey(sercret)//密钥
                     .parseClaimsJws(token)//token

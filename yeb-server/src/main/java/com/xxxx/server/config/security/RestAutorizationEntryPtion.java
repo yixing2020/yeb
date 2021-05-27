@@ -23,8 +23,9 @@ public class RestAutorizationEntryPtion implements AuthenticationEntryPoint {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         PrintWriter writer = response.getWriter();
-        RespBean respBean = RespBean.error("权限不足!请联系管理员");
+        RespBean respBean = RespBean.error("权限失效!请联系管理员");
         respBean.setCode(401);
+        //new ObjectMapper().writeValueAsString(respBean)转换为json 输出
         writer.write(new ObjectMapper().writeValueAsString(respBean));
         writer.flush();
         writer.close();
